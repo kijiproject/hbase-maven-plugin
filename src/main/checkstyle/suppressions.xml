@@ -15,7 +15,11 @@
   <suppress checks="JavadocType" files="src/test/java/"/>
   <suppress checks="JavadocMethod" files="src/test/java/"/>
 
-  <!-- The goal javadoc annotation is used in maven. -->
+  <!-- The @goal javadoc annotation is used in maven Mojo files. -->
   <suppress checks="TreeWalker"
+            files="src/main/java/com/odiago/maven/plugins/hbase/.*Mojo[.]java"/>
+
+  <!-- Line length in Mojo files should be ignored because of javadoc @parameters. -->
+  <suppress checks="LineLength"
             files="src/main/java/com/odiago/maven/plugins/hbase/.*Mojo[.]java"/>
 </suppressions>
