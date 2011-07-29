@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!--
+  (c) Copyright 2011 Odiago, Inc.
+-->
+
+<!DOCTYPE suppressions PUBLIC
+    "-//Puppy Crawl//DTD Suppressions 1.1//EN"
+    "http://www.puppycrawl.com/dtds/suppressions_1_1.dtd">
+
+<suppressions>
+  <!-- Test files don't need package-info.java files. -->
+  <suppress checks="JavadocPackage" files="src/test/java/"/>
+
+  <!-- Test files don't need javadoc comments. -->
+  <suppress checks="JavadocType" files="src/test/java/"/>
+  <suppress checks="JavadocMethod" files="src/test/java/"/>
+
+  <!-- The goal javadoc annotation is used in maven. -->
+  <suppress checks="TreeWalker"
+            files="src/main/java/com/odiago/maven/plugins/hbase/.*Mojo[.]java"/>
+</suppressions>

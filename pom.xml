@@ -21,7 +21,6 @@
         <artifactId>maven-checkstyle-plugin</artifactId>
         <version>2.6</version>
         <dependencies>
-          <!-- depend on checkstyle configuration in odiago-build-tools -->
           <dependency>
             <groupId>com.odiago.build</groupId>
             <artifactId>build-resources</artifactId>
@@ -30,7 +29,9 @@
         </dependencies>
         <configuration>
           <configLocation>build-resources/checkstyle.xml</configLocation>
-          <suppressionsLocation>build-resources/suppressions.xml</suppressionsLocation>
+          <suppressionsLocation>
+            ${basedir}/src/main/checkstyle/suppressions.xml
+          </suppressionsLocation>
           <includeTestSourceDirectory>true</includeTestSourceDirectory>
         </configuration>
         <executions>
