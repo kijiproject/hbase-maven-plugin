@@ -13,7 +13,11 @@ import org.apache.maven.plugin.logging.Log;
  */
 public class MiniHBaseCluster extends MavenLogged {
   /** An HBase testing utility for starting/stopping the cluster. */
-  private HBaseTestingUtility mTestUtil;
+  private final HBaseTestingUtility mTestUtil;
+
+  /** Whether a mini MapReduce cluster should also be run. */
+  private final boolean mIsMapReduceEnabled;
+
   /** Whether the cluster is running. */
   private boolean mIsRunning;
 
@@ -21,10 +25,23 @@ public class MiniHBaseCluster extends MavenLogged {
    * Creates a new <code>MiniHBaseCluster</code> instance.
    *
    * @param log The maven log.
+   * @param enableMapReduce Whether to also use a mini MapReduce cluster.
    */
-  public MiniHBaseCluster(Log log) {
+  public MiniHBaseCluster(Log log, boolean enableMapReduce) {
+    this(log, enableMapReduce, new HBaseTestingUtility());
+  }
+
+  /**
+   * Creates a new <code>MiniHBaseCluster</code> instance.
+   *
+   * @param log The maven log.
+   * @param enableMapReduce Whether to also use a mini MapReduce cluster.
+   * @param hbaseTestUtil An HBase testing utility that can start and stop mini clusters.
+   */
+  public MiniHBaseCluster(Log log, boolean enableMapReduce, HBaseTestingUtility hbaseTestUtil) {
     super(log);
-    mTestUtil = new HBaseTestingUtility();
+    mTestUtil = hbaseTestUtil;
+    mIsMapReduceEnabled = enableMapReduce;
     mIsRunning = false;
   }
 
@@ -56,6 +73,15 @@ public class MiniHBaseCluster extends MavenLogged {
       throw new RuntimeException("Cluster already running.");
     }
     mTestUtil.startMiniCluster();
+    if (mIsMapReduceEnabled) {
+      getLog().info("Starting MapReduce cluster...");
+
+      // Work around a bug in HBaseTestingUtility that requires this conf var to be set.
+      getConfiguration().set("hadoop.log.dir", getConfiguration().get("hadoop.tmp.dir"));
+
+      mTestUtil.startMiniMapReduceCluster();
+      getLog().info("MapReduce cluster started.");
+    }
     mIsRunning = true;
   }
 
@@ -69,6 +95,11 @@ public class MiniHBaseCluster extends MavenLogged {
       getLog().error(
           "Attempting to shut down a cluster, but one was never started in this process.");
       return;
+    }
+    if (mIsMapReduceEnabled) {
+      getLog().info("Shutting down MapReduce cluster...");
+      mTestUtil.shutdownMiniMapReduceCluster();
+      getLog().info("MapReduce cluster shut down.");
     }
     mTestUtil.shutdownMiniCluster();
   }

@@ -23,10 +23,11 @@ public enum MiniHBaseClusterSingleton {
    * Starts the HBase cluster and blocks until it is ready.
    *
    * @param log The maven log.
+   * @param alsoStartMapReduce Whether to also start a mini MapReduce cluster.
    * @throws IOException If there is an error.
    */
-  public void startAndWaitUntilReady(Log log) throws IOException {
-    mCluster = new MiniHBaseCluster(log);
+  public void startAndWaitUntilReady(Log log, boolean alsoStartMapReduce) throws IOException {
+    mCluster = new MiniHBaseCluster(log, alsoStartMapReduce);
     mThread = new MiniHBaseClusterThread(log, mCluster);
 
     log.info("Starting new thread...");

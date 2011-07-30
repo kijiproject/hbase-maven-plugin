@@ -37,6 +37,13 @@ public class StartMojo extends AbstractMojo {
   private File mHBaseSiteFile;
 
   /**
+   * If true, also start a mini MapReduce cluster.
+   *
+   * @parameter property="mapReduceEnabled" expression="${mapreduce.enabled}" default-value="false"
+   */
+  private boolean mIsMapReduceEnabled;
+
+  /**
    * Sets the file that we should write the HBase cluster configuration to.
    *
    * <p>Note: The property "hbaseSiteFile" defined in this mojo means this method must be
@@ -49,6 +56,15 @@ public class StartMojo extends AbstractMojo {
   }
 
   /**
+   * Sets whether we should start a mini MapReduce cluster in addition to the HBase cluster.
+   *
+   * @param enabled Whether to start a mini MapReduce cluster.
+   */
+  public void setMapReduceEnabled(boolean enabled) {
+    mIsMapReduceEnabled = enabled;
+  }
+
+  /**
    * Starts a mini HBase cluster in a new thread.
    *
    * <p>This method is called by the maven plugin framework to run the goal.</p>
@@ -58,7 +74,7 @@ public class StartMojo extends AbstractMojo {
   @Override
   public void execute() throws MojoExecutionException {
     try {
-      MiniHBaseClusterSingleton.INSTANCE.startAndWaitUntilReady(getLog());
+      MiniHBaseClusterSingleton.INSTANCE.startAndWaitUntilReady(getLog(), mIsMapReduceEnabled);
     } catch (IOException e) {
       throw new MojoExecutionException("Unable to start HBase cluster.", e);
     }

@@ -30,3 +30,16 @@ the following to the build plugins section of your pom.xml file:
     </plugins>
   </build>
 
+You may also require a mini MapReduce cluster to be started alongside your HBase
+cluster.  To configure the plugin to do so, set mapReduceEnabled to true in your
+configuration:
+
+  <plugin>
+    <groupId>com.odiago.maven.plugins</groupId>
+    <artifactId>hbase-maven-plugin</artifactId>
+    <version>${version}</version>
+    <configuration>
+      <mapReduceEnabled>true</mapReduceEnabled>
+    </configuration>
+    <!-- ... -->
+  </plugin>
