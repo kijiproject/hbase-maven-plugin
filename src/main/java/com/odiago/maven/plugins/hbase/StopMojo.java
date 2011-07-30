@@ -15,6 +15,6 @@ public class StopMojo extends AbstractMojo {
   /** {@inheritDoc} */
   @Override
   public void execute() throws MojoExecutionException {
-    // TODO
+    MiniHBaseClusterSingleton.INSTANCE.stop(getLog());
   }
 }

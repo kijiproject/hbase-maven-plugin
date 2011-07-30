@@ -3,7 +3,10 @@
 package com.odiago.maven.plugins.hbase;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
+import org.apache.hadoop.conf.Configuration;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 
@@ -54,6 +57,40 @@ public class StartMojo extends AbstractMojo {
    */
   @Override
   public void execute() throws MojoExecutionException {
+    try {
+      MiniHBaseClusterSingleton.INSTANCE.startAndWaitUntilReady(getLog());
+    } catch (IOException e) {
+      throw new MojoExecutionException("Unable to start HBase cluster.", e);
+    }
+
+    // Get the HBase configuration.
+    Configuration conf = MiniHBaseClusterSingleton.INSTANCE.getClusterConfiguration();
+
+    // Create an hbase conf file to write.
+    File parentDir = mHBaseSiteFile.getParentFile();
+    if (null != parentDir && !parentDir.exists() && !parentDir.mkdirs()) {
+      throw new MojoExecutionException(
+          "Unable to create hbase conf file: " + mHBaseSiteFile.getPath());
+    }
+
+    // Write the file.
+    FileOutputStream fileOutputStream = null;
+    try {
+      fileOutputStream = new FileOutputStream(mHBaseSiteFile);
+      conf.writeXml(fileOutputStream);
+    } catch (IOException e) {
+      throw new MojoExecutionException(
+          "Unable to write to hbase conf file: " + mHBaseSiteFile.getPath(), e);
+    } finally {
+      if (null != fileOutputStream) {
+        try {
+          fileOutputStream.close();
+        } catch (IOException e) {
+          throw new MojoExecutionException(
+              "Unable to close hbase conf file stream: " + mHBaseSiteFile.getPath(), e);
+        }
+      }
+    }
     getLog().info("Wrote " + mHBaseSiteFile.getPath() + ".");
   }
 }
