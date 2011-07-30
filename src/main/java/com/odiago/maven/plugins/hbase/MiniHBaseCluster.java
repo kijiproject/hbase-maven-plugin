@@ -52,6 +52,9 @@ public class MiniHBaseCluster extends MavenLogged {
    * @throws Exception If there is an error.
    */
   public void startup() throws Exception {
+    if (isRunning()) {
+      throw new RuntimeException("Cluster already running.");
+    }
     mTestUtil.startMiniCluster();
     mIsRunning = true;
   }

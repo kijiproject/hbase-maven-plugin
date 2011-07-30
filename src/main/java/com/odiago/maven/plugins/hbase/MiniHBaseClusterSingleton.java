@@ -70,7 +70,7 @@ public enum MiniHBaseClusterSingleton {
       try {
         mThread.join();
       } catch (InterruptedException e) {
-        // Oh well.
+        log.debug("HBase cluster thread interrupted.");
       }
     }
     log.info("HBase cluster thread stopped.");

@@ -25,6 +25,8 @@ public class TestMiniHBaseClusterThread {
     // Expect a bunch of log calls.
     log.info(anyObject(String.class));
     expectLastCall().anyTimes();
+    log.debug(anyObject(String.class));
+    expectLastCall().anyTimes();
 
     // Expect the cluster to be started and shut down.
     hbaseCluster.startup();
@@ -41,7 +43,7 @@ public class TestMiniHBaseClusterThread {
     thread.start();
 
     // Verify that the thread is running.
-    thread.isAlive();
+    assertTrue(thread.isAlive());
 
     // Wait for the cluster to be ready.
     while (!thread.isClusterReady()) {

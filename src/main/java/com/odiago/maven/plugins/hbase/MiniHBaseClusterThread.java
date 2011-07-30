@@ -78,7 +78,7 @@ public class MiniHBaseClusterThread extends Thread implements MavenLoggable {
       try {
         sleep(1000);
       } catch (InterruptedException e) {
-        // Whatever.
+        getLog().debug("Main thread interrupted while waiting for cluster to stop.");
       }
     }
 
