@@ -79,7 +79,12 @@ public class MiniHBaseCluster extends MavenLogged {
       // Work around a bug in HBaseTestingUtility that requires this conf var to be set.
       getConfiguration().set("hadoop.log.dir", getConfiguration().get("hadoop.tmp.dir"));
 
-      mTestUtil.startMiniMapReduceCluster();
+      // Start a mini MapReduce cluster with one server.
+      mTestUtil.startMiniMapReduceCluster(1);
+
+      // Set the mapred.working.dir so stuff like partition files get written somewhere reasonable.
+      getConfiguration().set("mapred.working.dir", mTestUtil.getTestDir().toString());
+
       getLog().info("MapReduce cluster started.");
     }
     mIsRunning = true;

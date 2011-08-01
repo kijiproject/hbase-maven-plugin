@@ -69,7 +69,7 @@ public class TestMiniHBaseCluster {
 
     // Expect that the MapReduce cluster will be started and stopped.
     expect(mHBaseTestUtil.getConfiguration()).andReturn(new Configuration()).anyTimes();
-    mHBaseTestUtil.startMiniMapReduceCluster();
+    mHBaseTestUtil.startMiniMapReduceCluster(1);
     mHBaseTestUtil.shutdownMiniMapReduceCluster();
 
     MiniHBaseCluster cluster = new MiniHBaseCluster(mLog, true /* Enable MR */, mHBaseTestUtil);

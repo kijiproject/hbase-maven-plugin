@@ -7,7 +7,15 @@
        but findbugs thinks they are never set. -->
   <Match>
     <Class name="com.odiago.maven.plugins.hbase.StartMojo"/>
-    <Field name="mHBaseSiteFile"/>
-    <Bug pattern="UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR"/>
+    <Or>
+      <Field name="mHBaseSiteFile"/>
+      <Field name="mMavenProject"/>
+      <Field name="mPluginDependencyArtifacts"/>
+    </Or>
+    <Or>
+      <Bug pattern="UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR"/>
+      <Bug pattern="NP_UNWRITTEN_FIELD"/>
+      <Bug pattern="UWF_UNWRITTEN_FIELD"/>
+    </Or>
   </Match>
 </FindBugsFilter>
