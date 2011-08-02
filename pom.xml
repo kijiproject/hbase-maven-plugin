@@ -166,6 +166,20 @@
     </dependency>
   </dependencies>
 
+  <distributionManagement>
+    <!-- Internal maven repository. -->
+    <repository>
+      <id>odiago-maven</id>
+      <name>odiago-maven-releases</name>
+      <url>http://maven.odiago.com:8081/artifactory/maven-plugins-releases</url>
+    </repository>
+    <snapshotRepository>
+      <id>odiago-maven</id>
+      <name>odiago-maven-snapshots</name>
+      <url>http://maven.odiago.com:8081/artifactory/maven-plugins-snapshots</url>
+    </snapshotRepository>
+  </distributionManagement>
+
   <scm>
     <connection>scm:git:ssh://git@git.odiago.com/hbase-maven-plugin.git</connection>
     <url>scm:git:ssh://git@git.odiago.com/hbase-maven-plugin.git</url>

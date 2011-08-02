@@ -45,13 +45,13 @@ public class TestMiniHBaseCluster {
     mLog.info(anyObject(String.class));
     expectLastCall().anyTimes();
 
-    // Expect the HBase cluster to be started and stopped.
+    // Expect the HBase cluster to be configured, started, and stopped.
+    expect(mHBaseTestUtil.getConfiguration()).andReturn(new Configuration()).anyTimes();
     expect(mHBaseTestUtil.startMiniCluster()).andReturn(null);
     mHBaseTestUtil.shutdownMiniCluster();
 
-    MiniHBaseCluster cluster = new MiniHBaseCluster(mLog, false /* Disable MR */, mHBaseTestUtil);
-
     replayMocks();
+    MiniHBaseCluster cluster = new MiniHBaseCluster(mLog, false /* Disable MR */, mHBaseTestUtil);
     cluster.startup();
     cluster.shutdown();
     verifyMocks();
@@ -63,18 +63,19 @@ public class TestMiniHBaseCluster {
     mLog.info(anyObject(String.class));
     expectLastCall().anyTimes();
 
+    // Expect the HBase testing utility to be configured.
+    expect(mHBaseTestUtil.getConfiguration()).andReturn(new Configuration()).anyTimes();
+
     // Expect the HBase cluster to be started and stopped.
     expect(mHBaseTestUtil.startMiniCluster()).andReturn(null);
     mHBaseTestUtil.shutdownMiniCluster();
 
     // Expect that the MapReduce cluster will be started and stopped.
-    expect(mHBaseTestUtil.getConfiguration()).andReturn(new Configuration()).anyTimes();
     mHBaseTestUtil.startMiniMapReduceCluster(1);
     mHBaseTestUtil.shutdownMiniMapReduceCluster();
 
-    MiniHBaseCluster cluster = new MiniHBaseCluster(mLog, true /* Enable MR */, mHBaseTestUtil);
-
     replayMocks();
+    MiniHBaseCluster cluster = new MiniHBaseCluster(mLog, true /* Enable MR */, mHBaseTestUtil);
     cluster.startup();
     cluster.shutdown();
     verifyMocks();

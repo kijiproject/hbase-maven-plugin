@@ -6,12 +6,16 @@ import java.io.IOException;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseTestingUtility;
+import org.apache.hadoop.hbase.HConstants;
 import org.apache.maven.plugin.logging.Log;
 
 /**
  * A in-process mini HBase cluster that may be started and stopped.
  */
 public class MiniHBaseCluster extends MavenLogged {
+  /** The offset from the default HBase ports to use for the HMaster and HRegionServers. */
+  public static final int PORT_OFFSET = 1000;
+
   /** An HBase testing utility for starting/stopping the cluster. */
   private final HBaseTestingUtility mTestUtil;
 
@@ -40,7 +44,7 @@ public class MiniHBaseCluster extends MavenLogged {
    */
   public MiniHBaseCluster(Log log, boolean enableMapReduce, HBaseTestingUtility hbaseTestUtil) {
     super(log);
-    mTestUtil = hbaseTestUtil;
+    mTestUtil = configure(hbaseTestUtil);
     mIsMapReduceEnabled = enableMapReduce;
     mIsRunning = false;
   }
@@ -107,5 +111,38 @@ public class MiniHBaseCluster extends MavenLogged {
       getLog().info("MapReduce cluster shut down.");
     }
     mTestUtil.shutdownMiniCluster();
+  }
+
+  /**
+   * Configures an HBase testing utility.
+   *
+   * @param testUtil The test utility to configure.
+   * @return The configured utility.
+   */
+  private static HBaseTestingUtility configure(HBaseTestingUtility testUtil) {
+    // If HBase servers are running locally, the utility will use
+    // the "normal" ports. We override *all* ports first, so that
+    // we ensure that this can start without a problem.
+    Configuration conf = testUtil.getConfiguration();
+
+    // Move the master to a hopefully unused port.
+    conf.setInt(HConstants.MASTER_PORT, HConstants.DEFAULT_MASTER_PORT + PORT_OFFSET);
+    // Disable the master's web UI.
+    conf.setInt("hbase.master.info.port", -1);
+
+    // Move the regionserver to a hopefully unused port.
+    conf.setInt(HConstants.REGIONSERVER_PORT,
+        HConstants.DEFAULT_REGIONSERVER_PORT + PORT_OFFSET);
+    // Disable the regionserver's web UI.
+    conf.setInt("hbase.regionserver.info.port", -1);
+
+    // Increase max zookeeper client connections.
+    conf.setInt("hbase.zookeeper.property.maxClientCnxns", 80);
+
+    // TODO(gwu): Increasing the port numbers by a constant is not sufficient for multiple
+    // executions of this plugin on the same machine.  Allow this to be specified as a
+    // maven plugin parameter.
+
+    return testUtil;
   }
 }
