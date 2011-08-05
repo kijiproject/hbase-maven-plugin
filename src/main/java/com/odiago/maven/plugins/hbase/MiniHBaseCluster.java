@@ -30,9 +30,10 @@ public class MiniHBaseCluster extends MavenLogged {
    *
    * @param log The maven log.
    * @param enableMapReduce Whether to also use a mini MapReduce cluster.
+   * @param conf Hadoop configuration for the cluster.
    */
-  public MiniHBaseCluster(Log log, boolean enableMapReduce) {
-    this(log, enableMapReduce, new HBaseTestingUtility());
+  public MiniHBaseCluster(Log log, boolean enableMapReduce, Configuration conf) {
+    this(log, enableMapReduce, new HBaseTestingUtility(conf));
   }
 
   /**

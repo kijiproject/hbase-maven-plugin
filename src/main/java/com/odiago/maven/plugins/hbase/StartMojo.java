@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
 
 import org.apache.hadoop.conf.Configuration;
@@ -52,6 +54,13 @@ public class StartMojo extends AbstractMojo {
   private boolean mIsMapReduceEnabled;
 
   /**
+   * Extra Hadoop configuration properties to use.
+   *
+   * @parameter property="hadoopConfiguration"
+   */
+  private Properties mHadoopConfiguration;
+
+  /**
    * A list of this plugin's dependency artifacts.
    *
    * @parameter default-value="${plugin.artifacts}"
@@ -92,6 +101,15 @@ public class StartMojo extends AbstractMojo {
   }
 
   /**
+   * Sets Hadoop configuration properties.
+   *
+   * @param properties Hadoop configuration properties to use in the mini cluster.
+   */
+  public void setHadoopConfiguration(Properties properties) {
+    mHadoopConfiguration = properties;
+  }
+
+  /**
    * Starts a mini HBase cluster in a new thread.
    *
    * <p>This method is called by the maven plugin framework to run the goal.</p>
@@ -103,14 +121,24 @@ public class StartMojo extends AbstractMojo {
     System.setProperty("java.class.path", getClassPath());
     getLog().info("Set java.class.path to: " + System.getProperty("java.class.path"));
 
+    // Set any extra hadoop options.
+    Configuration conf = new Configuration();
+    if (null != mHadoopConfiguration) {
+      for (Map.Entry<Object, Object> property : mHadoopConfiguration.entrySet()) {
+        String confKey = property.getKey().toString();
+        String confValue = property.getValue().toString();
+        getLog().info("Setting hadoop conf property '" + confKey + "' to '" + confValue + "'");
+        conf.set(confKey, confValue);
+      }
+    }
+
+    // Start the cluster.
     try {
-      MiniHBaseClusterSingleton.INSTANCE.startAndWaitUntilReady(getLog(), mIsMapReduceEnabled);
+      MiniHBaseClusterSingleton.INSTANCE.startAndWaitUntilReady(
+          getLog(), mIsMapReduceEnabled, conf);
     } catch (IOException e) {
       throw new MojoExecutionException("Unable to start HBase cluster.", e);
     }
-
-    // Get the HBase configuration.
-    Configuration conf = MiniHBaseClusterSingleton.INSTANCE.getClusterConfiguration();
 
     // Create an hbase conf file to write.
     File parentDir = mHBaseSiteFile.getParentFile();

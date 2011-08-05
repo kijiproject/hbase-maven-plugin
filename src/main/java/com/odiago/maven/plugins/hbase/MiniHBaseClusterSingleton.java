@@ -24,10 +24,12 @@ public enum MiniHBaseClusterSingleton {
    *
    * @param log The maven log.
    * @param alsoStartMapReduce Whether to also start a mini MapReduce cluster.
+   * @param conf Hadoop configuration for the cluster.
    * @throws IOException If there is an error.
    */
-  public void startAndWaitUntilReady(Log log, boolean alsoStartMapReduce) throws IOException {
-    mCluster = new MiniHBaseCluster(log, alsoStartMapReduce);
+  public void startAndWaitUntilReady(Log log, boolean alsoStartMapReduce, Configuration conf)
+      throws IOException {
+    mCluster = new MiniHBaseCluster(log, alsoStartMapReduce, conf);
     mThread = new MiniHBaseClusterThread(log, mCluster);
 
     log.info("Starting new thread...");
@@ -46,11 +48,14 @@ public enum MiniHBaseClusterSingleton {
   }
 
   /**
-   * Provides access to the cluster configuration.
+   * Provides access to the cluster configuration after it has started.
    *
    * @return The configuration.
    */
   public Configuration getClusterConfiguration() {
+    if (null == mCluster) {
+      throw new IllegalStateException("The cluster has not started yet.");
+    }
     return mCluster.getConfiguration();
   }
 
