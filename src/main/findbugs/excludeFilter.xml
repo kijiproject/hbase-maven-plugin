@@ -11,6 +11,7 @@
       <Field name="mHBaseSiteFile"/>
       <Field name="mMavenProject"/>
       <Field name="mPluginDependencyArtifacts"/>
+      <Field name="mHBaseConfIndex"/>
     </Or>
     <Or>
       <Bug pattern="UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR"/>
