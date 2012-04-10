@@ -18,6 +18,8 @@
 package com.odiago.maven.plugins.hbase;
 
 import java.io.IOException;
+import java.net.ServerSocket;
+import java.util.Random;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseTestingUtility;
@@ -28,8 +30,6 @@ import org.apache.maven.plugin.logging.Log;
  * A in-process mini HBase cluster that may be started and stopped.
  */
 public class MiniHBaseCluster extends MavenLogged {
-  /** The offset from the default HBase ports to use for the HMaster and HRegionServers. */
-  public static final int PORT_OFFSET = 1000;
 
   /** An HBase testing utility for starting/stopping the cluster. */
   private final HBaseTestingUtility mTestUtil;
@@ -141,14 +141,16 @@ public class MiniHBaseCluster extends MavenLogged {
     // we ensure that this can start without a problem.
     Configuration conf = testUtil.getConfiguration();
 
+    int offset = new Random(System.currentTimeMillis()).nextInt(1500) + 500;
+
     // Move the master to a hopefully unused port.
-    conf.setInt(HConstants.MASTER_PORT, HConstants.DEFAULT_MASTER_PORT + PORT_OFFSET);
+    conf.setInt(HConstants.MASTER_PORT, findOpenPort(HConstants.DEFAULT_MASTER_PORT + offset));
     // Disable the master's web UI.
     conf.setInt("hbase.master.info.port", -1);
 
     // Move the regionserver to a hopefully unused port.
     conf.setInt(HConstants.REGIONSERVER_PORT,
-        HConstants.DEFAULT_REGIONSERVER_PORT + PORT_OFFSET);
+        findOpenPort(HConstants.DEFAULT_REGIONSERVER_PORT + offset));
     // Disable the regionserver's web UI.
     conf.setInt("hbase.regionserver.info.port", -1);
 
@@ -160,5 +162,42 @@ public class MiniHBaseCluster extends MavenLogged {
     // maven plugin parameter.
 
     return testUtil;
+  }
+
+  /**
+   * Find an available port.
+   *
+   * @param startPort the starting port to check.
+   * @return an open port number.
+   * @throws IllegalArgumentException if it can't find an open port.
+   */
+  public static int findOpenPort(int startPort) {
+    if (startPort < 1024 || startPort > 65534) {
+      throw new IllegalArgumentException("Invalid start port: " + startPort);
+    }
+
+    for (int port = startPort; port < 65534; port++) {
+      ServerSocket ss = null;
+      try {
+        ss = new ServerSocket(port);
+        ss.setReuseAddress(true);
+        return port;
+      } catch (IOException ioe) {
+        // This port isn't open. Loop around.
+      } finally {
+        if (ss != null) {
+          try {
+            // TODO(aaron): Techincally, this causes a race condition. Another instance of
+            // findOpenPort() could determine that this port is available between now and
+            // when the client of this method calls this function.
+            ss.close();
+          } catch (IOException ioe) {
+            // Shouldn't happen.
+          }
+        }
+      }
+    }
+
+    throw new IllegalArgumentException("No port available starting at " + startPort);
   }
 }

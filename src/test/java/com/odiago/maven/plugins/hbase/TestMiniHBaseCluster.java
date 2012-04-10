@@ -17,7 +17,10 @@
 
 package com.odiago.maven.plugins.hbase;
 
+import java.net.ServerSocket;
+
 import static org.easymock.EasyMock.*;
+import static org.junit.Assert.*;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseTestingUtility;
@@ -94,5 +97,38 @@ public class TestMiniHBaseCluster {
     cluster.startup();
     cluster.shutdown();
     verifyMocks();
+  }
+
+  @Test
+  public void testListenerOccupied() throws Exception {
+    // Test that findOpenPort() doesn't return a port we know to be in use.
+    ServerSocket ss = new ServerSocket(9867);
+    ss.setReuseAddress(true);
+    try {
+      int openPort = MiniHBaseCluster.findOpenPort(9867);
+      assertTrue("Port 9867 is already bound!", openPort > 9867);
+    } finally {
+      ss.close();
+    }
+  }
+
+  @Test
+  public void testListenerOpen() throws Exception {
+    // Test that findOpenPort() can return a port we don't believe is in use.
+    ServerSocket ss = null;
+    try {
+      ss = new ServerSocket(9867);
+      ss.setReuseAddress(true);
+    } finally {
+      if (null != ss) {
+        ss.close();
+      }
+    }
+
+    // Port 9867 is unlikely to be in use, since we just successfully bound to it
+    // and closed it.
+
+    int openPort = MiniHBaseCluster.findOpenPort(9867);
+    assertEquals("Port 9867 shouldn't be currently bound!", 9867, openPort);
   }
 }
