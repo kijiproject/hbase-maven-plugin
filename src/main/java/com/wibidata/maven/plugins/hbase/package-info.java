@@ -1,7 +1,7 @@
 /**
- * Licensed to Odiago, Inc. under one or more contributor license
+ * Licensed to WibiData, Inc. under one or more contributor license
  * agreements.  See the NOTICE file distributed with this work for
- * additional information regarding copyright ownership.  Odiago, Inc.
+ * additional information regarding copyright ownership.  WibiData, Inc.
  * licenses this file to you under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
@@ -15,29 +15,7 @@
  * permissions and limitations under the License.
  */
 
-package com.odiago.maven.plugins.hbase;
-
-import org.apache.maven.plugin.logging.Log;
-
 /**
- * An abstract base class for objects that write to the maven log.
+ * A maven plugin that allows integration tests to run with a mini-hbase cluster.
  */
-public abstract class MavenLogged implements MavenLoggable {
-  /** The maven log used to communicate with the maven user. */
-  private final Log mLog;
-
-  /**
-   * Constructor.
-   *
-   * @param log The maven log.
-   */
-  protected MavenLogged(Log log) {
-    mLog = log;
-  }
-
-  /** {@inheritDoc} */
-  @Override
-  public Log getLog() {
-    return mLog;
-  }
-}
+package com.wibidata.maven.plugins.hbase;

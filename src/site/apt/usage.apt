@@ -16,7 +16,7 @@ Usage
       <plugins>
         <!-- ... -->
         <plugin>
-          <groupId>com.odiago.maven.plugins</groupId>
+          <groupId>com.wibidata.maven.plugins</groupId>
           <artifactId>hbase-maven-plugin</artifactId>
           <version>${version}</version>
           <executions>
@@ -42,7 +42,7 @@ Usage
 
 +---
     <plugin>
-      <groupId>com.odiago.maven.plugins</groupId>
+      <groupId>com.wibidata.maven.plugins</groupId>
       <artifactId>hbase-maven-plugin</artifactId>
       <version>${version}</version>
       <configuration>
@@ -61,7 +61,7 @@ Usage
 
 +---
     <plugin>
-      <groupId>com.odiago.maven.plugins</groupId>
+      <groupId>com.wibidata.maven.plugins</groupId>
       <artifactId>hbase-maven-plugin</artifactId>
       <version>${version}</version>
       <configuration>

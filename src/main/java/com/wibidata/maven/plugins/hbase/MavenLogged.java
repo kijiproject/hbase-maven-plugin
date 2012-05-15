@@ -1,7 +1,7 @@
 /**
- * Licensed to Odiago, Inc. under one or more contributor license
+ * Licensed to WibiData, Inc. under one or more contributor license
  * agreements.  See the NOTICE file distributed with this work for
- * additional information regarding copyright ownership.  Odiago, Inc.
+ * additional information regarding copyright ownership.  WibiData, Inc.
  * licenses this file to you under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
@@ -15,21 +15,29 @@
  * permissions and limitations under the License.
  */
 
-package com.odiago.maven.plugins.hbase;
+package com.wibidata.maven.plugins.hbase;
 
-import org.apache.maven.plugin.AbstractMojo;
-import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugin.logging.Log;
 
 /**
- * A maven goal that stops the mini HBase cluster started by the 'start' goal.
- *
- * @goal stop
- * @phase post-integration-test
+ * An abstract base class for objects that write to the maven log.
  */
-public class StopMojo extends AbstractMojo {
+public abstract class MavenLogged implements MavenLoggable {
+  /** The maven log used to communicate with the maven user. */
+  private final Log mLog;
+
+  /**
+   * Constructor.
+   *
+   * @param log The maven log.
+   */
+  protected MavenLogged(Log log) {
+    mLog = log;
+  }
+
   /** {@inheritDoc} */
   @Override
-  public void execute() throws MojoExecutionException {
-    MiniHBaseClusterSingleton.INSTANCE.stop(getLog());
+  public Log getLog() {
+    return mLog;
   }
 }

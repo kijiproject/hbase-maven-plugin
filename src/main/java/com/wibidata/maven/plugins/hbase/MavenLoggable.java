@@ -1,7 +1,7 @@
 /**
- * Licensed to Odiago, Inc. under one or more contributor license
+ * Licensed to WibiData, Inc. under one or more contributor license
  * agreements.  See the NOTICE file distributed with this work for
- * additional information regarding copyright ownership.  Odiago, Inc.
+ * additional information regarding copyright ownership.  WibiData, Inc.
  * licenses this file to you under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
@@ -15,7 +15,18 @@
  * permissions and limitations under the License.
  */
 
+package com.wibidata.maven.plugins.hbase;
+
+import org.apache.maven.plugin.logging.Log;
+
 /**
- * A maven plugin that allows integration tests to run with a mini-hbase cluster.
+ * Interface for objects that can write to the maven log.
  */
-package com.odiago.maven.plugins.hbase;
+public interface MavenLoggable {
+  /**
+   * Provides access to the maven log used to communicate with the user.
+   *
+   * @return The maven log.
+   */
+  Log getLog();
+}
