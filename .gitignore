@@ -7,6 +7,8 @@
 /.settings/
 /prj.el
 /.jde/
+.idea
+*.iml
 
 # Build artifacts.
 /target/
