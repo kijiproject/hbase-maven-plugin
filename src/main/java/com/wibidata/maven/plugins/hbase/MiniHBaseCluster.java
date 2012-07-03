@@ -103,7 +103,8 @@ public class MiniHBaseCluster extends MavenLogged {
       mTestUtil.startMiniMapReduceCluster(1);
 
       // Set the mapred.working.dir so stuff like partition files get written somewhere reasonable.
-      getConfiguration().set("mapred.working.dir", mTestUtil.getTestDir().toString());
+      getConfiguration().set("mapred.working.dir",
+          mTestUtil.getDataTestDir("mapred-working").toString());
 
       getLog().info("MapReduce cluster started.");
     }
@@ -113,9 +114,9 @@ public class MiniHBaseCluster extends MavenLogged {
   /**
    * Stops the cluster.  Blocks until shut down.
    *
-   * @throws IOException If there is an error.
+   * @throws Exception If there is an error.
    */
-  public void shutdown() throws IOException {
+  public void shutdown() throws Exception {
     if (!mIsRunning) {
       getLog().error(
           "Attempting to shut down a cluster, but one was never started in this process.");

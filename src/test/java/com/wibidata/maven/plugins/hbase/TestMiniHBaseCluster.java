@@ -23,6 +23,7 @@ import static org.easymock.EasyMock.*;
 import static org.junit.Assert.*;
 
 import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.hbase.HBaseTestingUtility;
 import org.apache.maven.plugin.logging.Log;
 import org.junit.Before;
@@ -90,7 +91,11 @@ public class TestMiniHBaseCluster {
 
     // Expect that the MapReduce cluster will be started and stopped.
     mHBaseTestUtil.startMiniMapReduceCluster(1);
+
     mHBaseTestUtil.shutdownMiniMapReduceCluster();
+    // Expect the HBase testing utility to request a test dir for mapred.
+    expect(mHBaseTestUtil.getDataTestDir(anyObject(String.class)))
+        .andReturn(new Path("/mapred-working"));
 
     replayMocks();
     MiniHBaseCluster cluster = new MiniHBaseCluster(mLog, true /* Enable MR */, mHBaseTestUtil);
