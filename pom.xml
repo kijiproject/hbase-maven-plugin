@@ -20,7 +20,7 @@
 
   <groupId>com.wibidata.maven.plugins</groupId>
   <artifactId>hbase-maven-plugin</artifactId>
-  <version>1.0.5-cdh3-SNAPSHOT</version>
+  <version>1.0.5-cdh3</version>
   <packaging>maven-plugin</packaging>
 
   <name>hbase-maven-plugin</name>
