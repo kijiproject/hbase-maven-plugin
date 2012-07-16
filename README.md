@@ -11,6 +11,6 @@ an HBase cluster.  Typically, you will bind the `start` goal to your
 
 ### Documentation
 
-* [Plugin Usage](http://wibidata.github.com/hbase-maven-plugin/1.0.5-SNAPSHOT/usage.html)
-* [Plugin Goals](http://wibidata.github.com/hbase-maven-plugin/1.0.5-SNAPSHOT/plugin-info.html)
-* [Java API (Javadoc)](http://wibidata.github.com/hbase-maven-plugin/1.0.5-SNAPSHOT/apidocs/)
+* [Plugin Usage](http://wibidata.github.com/hbase-maven-plugin/1.0.5-cdh4/usage.html)
+* [Plugin Goals](http://wibidata.github.com/hbase-maven-plugin/1.0.5-cdh4/plugin-info.html)
+* [Java API (Javadoc)](http://wibidata.github.com/hbase-maven-plugin/1.0.5-cdh4/apidocs/)
