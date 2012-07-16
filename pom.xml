@@ -244,6 +244,14 @@
     <developerConnection>${scm.connection}</developerConnection>
   </scm>
 
+  <repositories>
+    <repository>
+      <id>cloudera-public</id>
+      <name>cloudera-public</name>
+      <url>https://repository.cloudera.com/content/groups/public</url>
+    </repository>
+  </repositories>
+
   <profiles>
     <profile>
       <id>repo.odiago.com</id>
