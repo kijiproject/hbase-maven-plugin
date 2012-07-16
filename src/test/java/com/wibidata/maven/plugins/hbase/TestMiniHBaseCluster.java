@@ -91,11 +91,7 @@ public class TestMiniHBaseCluster {
 
     // Expect that the MapReduce cluster will be started and stopped.
     mHBaseTestUtil.startMiniMapReduceCluster(1);
-
     mHBaseTestUtil.shutdownMiniMapReduceCluster();
-    // Expect the HBase testing utility to request a test dir for mapred.
-    expect(mHBaseTestUtil.getDataTestDir(anyObject(String.class)))
-        .andReturn(new Path("/mapred-working"));
 
     replayMocks();
     MiniHBaseCluster cluster = new MiniHBaseCluster(mLog, true /* Enable MR */, mHBaseTestUtil);

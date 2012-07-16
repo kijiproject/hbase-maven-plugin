@@ -104,7 +104,7 @@ public class MiniHBaseCluster extends MavenLogged {
 
       // Set the mapred.working.dir so stuff like partition files get written somewhere reasonable.
       getConfiguration().set("mapred.working.dir",
-          mTestUtil.getDataTestDir("mapred-working").toString());
+          mTestUtil.getTestDir("mapred-working").toString());
 
       getLog().info("MapReduce cluster started.");
     }
