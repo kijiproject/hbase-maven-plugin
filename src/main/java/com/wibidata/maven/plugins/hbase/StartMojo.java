@@ -28,6 +28,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.DependencyResolutionRequiredException;
@@ -67,6 +68,16 @@ public class StartMojo extends AbstractMojo {
    * @parameter property="skip" default-value="false"
    */
   private boolean mSkip;
+
+  /**
+   * If true, the Hadoop temporary directory (given by Hadoop configuration property hadoop.tmp
+   * .dir) will be cleared before the cluster is started, then copied to the project's build
+   * directory before the cluster is shutdown.
+   *
+   * @parameter property="saveHadoopTmpDir" expression="${save.hadoop.tmp}" default-value="false"
+   * @required
+   */
+  private boolean mSaveHadoopTmpDir;
 
   /**
    * The file that will store the configuration required to connect to the started mini HBase
@@ -151,6 +162,18 @@ public class StartMojo extends AbstractMojo {
    */
   public void setSkip(boolean skip) {
     mSkip = skip;
+  }
+
+  /**
+   * Sets whether the Hadoop temporary directory, given by hadoop.tmp.dir, should be cleared
+   * before the cluster is started and copied to the project build directory before the cluster
+   * is shutdown.
+   *
+   * @param saveTempDir If true, the directory will be copied to the project build directory
+   *     before the cluster is shutdown.
+   */
+  public void setSaveHadoopTmpDir(boolean saveTempDir) {
+    mSaveHadoopTmpDir = saveTempDir;
   }
 
   /**
@@ -252,6 +275,11 @@ public class StartMojo extends AbstractMojo {
       }
     }
 
+    // If necessary, clear the Hadoop tmp dir.
+    if (mSaveHadoopTmpDir) {
+      removeHadoopTmpDir(conf);
+    }
+
     // Start the cluster.
     try {
       MiniHBaseClusterSingleton.INSTANCE.startAndWaitUntilReady(
@@ -272,6 +300,31 @@ public class StartMojo extends AbstractMojo {
     // Write the configuration index.
     if (mWriteConfIndex) {
       writeConfigurationIndex();
+    }
+  }
+
+  /**
+   * Deletes the directory given by hadoop.tmp.dir in the specified configuration. The
+   * MapReduce cluster started by this plugin will store logs for job tasks in a job-specific
+   * directory under hadoop.tmp.dir/userlogs. The
+   * {@link org.apache.hadoop.hbase.HBaseTestingUtility} will delete log files on shutdown but
+   * not the directory structure, making it hard to locate specific job logs after multiple runs.
+   * Clearing hadoop.tmp.dir before the cluster starts again alleviates this problem.
+   *
+   * @param conf A Hadoop configuration used to determine the value of hadoop.tmp.dir.
+   */
+  private void removeHadoopTmpDir(Configuration conf) {
+    String hadoopTmpPath = conf.get("hadoop.tmp.dir");
+    File hadoopTmp = new File(hadoopTmpPath);
+    if (hadoopTmp.exists()) {
+      getLog().info("Deleting Hadoop tmp dir " + hadoopTmp.toString() + " because it already " +
+          "exists.");
+      try {
+        FileUtils.deleteDirectory(hadoopTmp);
+        getLog().info("Successfully deleted Hadoop tmp dir: " + hadoopTmp.toString());
+      } catch (IOException e) {
+        getLog().warn("An existing Hadoop tmp dir could not be deleted.", e);
+      }
     }
   }
 

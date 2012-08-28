@@ -108,3 +108,39 @@ Usage
   * target/hbase.log - The HBase log.
 
   * target/mapred.log - The MapReduce log.
+
+* MapReduce task logs
+
+  Jobs run on the MapReduce cluster started by the plugin produce task
+  logs that may be useful for debugging but that are deleted when the 
+  cluster is shutdown. These logs are written to the location given by
+  the Hadoop configuration property `hadoop.tmp.dir`. Setting 
+  `saveHadoopTmpDir` to `true` in the plugin's configuration or setting
+  `-Dsave.hadoop.tmp=true` on the command line will clear
+  the directory given by `hadoop.tmp.dir` before the cluster is started
+  and copy the contents of `hadoop.tmp.dir` to the directory `hadoop-tmp`
+  in your project's build directory. Task logs can be found at
+  `${project.build.directory}/hadoop-tmp/userlogs`.
+
++---
+    <plugin>
+      <groupId>com.wibidata.maven.plugins</groupId>
+      <artifactId>hbase-maven-plugin</artifactId>
+      <version>${version}</version>
+      <configuration>
+        <hadoopConfiguration>
+          <property>
+            <name>mapred.tasktracker.map.tasks.maximum</name>
+            <value>16</value>
+          </property>
+          <property>
+            <name>mapred.tasktracker.reduce.tasks.maximum</name>
+            <value>8</value>
+          </property>
+        </hadoopConfiguration>
+        <mapReduceEnabled>true</mapReduceEnabled>
+        <saveHadoopTmpDir>true</saveHadoopTmpDir>
+      </configuration>
+      <!-- ... -->
+    </plugin>
++---
