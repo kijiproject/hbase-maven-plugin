@@ -6,6 +6,23 @@ Usage
   `post-integration-test` phase of the maven build lifecycle.
 
 
+* Referencing the maven repository hosted on github
+
+  Built artifacts are hosted on github, so you don't need to download the source
+  and install the plugin manually. To tell maven about the repository from which
+  to download this plugin, add the following to your ~/.m2/settings.xml or your
+  project's pom.xml:
+
++---
+    <pluginRepositories>
+      <pluginRepository>
+        <id>hbase-maven-plugin-repo</id>
+        <url>http://wibidata.github.com/hbase-maven-plugin/repo</url>
+      </pluginRepository>
+    </pluginRepositories>
++---
+
+
 * Start HBase during the integration-test phase
 
   To bind the goals to their default phases (pre- and post-integration-test), add
