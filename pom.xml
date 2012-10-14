@@ -20,7 +20,7 @@
 
   <groupId>org.kiji.maven.plugins</groupId>
   <artifactId>hbase-maven-plugin</artifactId>
-  <version>1.0.9-cdh4</version>
+  <version>1.0.9-hadoop1-SNAPSHOT</version>
   <packaging>maven-plugin</packaging>
 
   <name>hbase-maven-plugin</name>
@@ -47,8 +47,8 @@
     <maven.compiler.target>${java.version}</maven.compiler.target>
 
     <scm.connection>scm:git:ssh://git@github.com/kijiproject/hbase-maven-plugin.git</scm.connection>
-    <hadoop.version>2.0.0-mr1-cdh4.1.2</hadoop.version>
-    <hbase.version>0.92.1-cdh4.1.2</hbase.version>
+    <hadoop.version>1.0.3</hadoop.version>
+    <hbase.version>0.92.1</hbase.version>
     <guava.version>11.0.2</guava.version>
     <slf4j.version>1.6.1</slf4j.version>
   </properties>
@@ -156,6 +156,11 @@
       <artifactId>avro</artifactId>
       <version>1.6.3</version>
       <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>commons-io</groupId>
+      <artifactId>commons-io</artifactId>
+      <version>2.1</version>
     </dependency>
     <dependency>
       <groupId>org.apache.maven</groupId>
