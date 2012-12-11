@@ -15,7 +15,7 @@
  * permissions and limitations under the License.
  */
 
-package com.wibidata.maven.plugins.hbase;
+package org.kiji.maven.plugins.hbase;
 
 import java.net.ServerSocket;
 

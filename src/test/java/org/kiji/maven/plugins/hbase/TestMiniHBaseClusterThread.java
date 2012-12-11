@@ -15,7 +15,7 @@
  * permissions and limitations under the License.
  */
 
-package com.wibidata.maven.plugins.hbase;
+package org.kiji.maven.plugins.hbase;
 
 import static org.easymock.EasyMock.*;
 import static org.junit.Assert.*;

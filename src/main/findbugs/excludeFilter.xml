@@ -19,7 +19,7 @@
   <!-- The maven plugin framework will set these fields with reflection,
        but findbugs thinks they are never set. -->
   <Match>
-    <Class name="com.wibidata.maven.plugins.hbase.StartMojo"/>
+    <Class name="org.kiji.maven.plugins.hbase.StartMojo"/>
     <Or>
       <Field name="mHBaseSiteFile"/>
       <Field name="mMavenProject"/>

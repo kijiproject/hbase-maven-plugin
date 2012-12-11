@@ -6,18 +6,19 @@ Usage
   `post-integration-test` phase of the maven build lifecycle.
 
 
-* Referencing the maven repository hosted on github
+* Referencing the maven repository hosted by WibiData
 
-  Built artifacts are hosted on github, so you don't need to download the source
-  and install the plugin manually. To tell maven about the repository from which
-  to download this plugin, add the following to your ~/.m2/settings.xml or your
-  project's pom.xml:
+  Built artifacts are hosted on WibiData's maven repository, so you don't need
+  to download the source and install the plugin manually. To tell maven about
+  the repository from which to download this plugin, add the following to your
+  ~/.m2/settings.xml or your project's pom.xml:
 
 +---
     <pluginRepositories>
       <pluginRepository>
-        <id>hbase-maven-plugin-repo</id>
-        <url>http://wibidata.github.com/hbase-maven-plugin/repo</url>
+        <id>kiji-plugins</id>
+        <name>kiji-plugins</name>
+        <url>https://repo.wibidata.com/artifactory/kiji</url>
       </pluginRepository>
     </pluginRepositories>
 +---
@@ -33,7 +34,7 @@ Usage
       <plugins>
         <!-- ... -->
         <plugin>
-          <groupId>com.wibidata.maven.plugins</groupId>
+          <groupId>org.kiji.maven.plugins</groupId>
           <artifactId>hbase-maven-plugin</artifactId>
           <version>${version}</version>
           <executions>
@@ -59,7 +60,7 @@ Usage
 
 +---
     <plugin>
-      <groupId>com.wibidata.maven.plugins</groupId>
+      <groupId>org.kiji.maven.plugins</groupId>
       <artifactId>hbase-maven-plugin</artifactId>
       <version>${version}</version>
       <configuration>
@@ -78,7 +79,7 @@ Usage
 
 +---
     <plugin>
-      <groupId>com.wibidata.maven.plugins</groupId>
+      <groupId>org.kiji.maven.plugins</groupId>
       <artifactId>hbase-maven-plugin</artifactId>
       <version>${version}</version>
       <configuration>
@@ -141,7 +142,7 @@ Usage
 
 +---
     <plugin>
-      <groupId>com.wibidata.maven.plugins</groupId>
+      <groupId>org.kiji.maven.plugins</groupId>
       <artifactId>hbase-maven-plugin</artifactId>
       <version>${version}</version>
       <configuration>
