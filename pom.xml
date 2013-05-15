@@ -48,7 +48,7 @@
 
     <scm.connection>scm:git:ssh://git@github.com/kijiproject/hbase-maven-plugin.git</scm.connection>
     <hadoop.version>1.0.3</hadoop.version>
-    <hbase.version>0.92.1</hbase.version>
+    <hbase.version>0.94.7</hbase.version>
     <guava.version>11.0.2</guava.version>
     <slf4j.version>1.6.1</slf4j.version>
   </properties>
