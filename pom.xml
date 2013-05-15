@@ -20,7 +20,7 @@
 
   <groupId>org.kiji.maven.plugins</groupId>
   <artifactId>hbase-maven-plugin</artifactId>
-  <version>1.0.11-hadoop1-SNAPSHOT</version>
+  <version>1.0.11-hadoop1</version>
   <packaging>maven-plugin</packaging>
 
   <name>hbase-maven-plugin</name>
